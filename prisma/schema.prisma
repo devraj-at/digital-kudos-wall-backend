@@ -19,3 +19,13 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model KudoCard {
+  id           String    @id @default(cuid())
+  message      String  
+  category     String 
+  senderName   String
+  receiverName String
+  teamName     String
+  createdAt    DateTime  @default(now())
+}

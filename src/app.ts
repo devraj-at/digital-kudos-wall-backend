@@ -5,10 +5,13 @@ import setupUserRoutes from "./modules/user/presentation/routes/user.routes";
 import { RegisterUserUseCase } from "./modules/user/application/use-cases/register-user/register-user.use-case";
 import { LoginUseCase } from "./modules/user/application/use-cases/login/login.use-case";
 import { testSupportRouter } from "./modules/test-support/http/test-support.routes";
+import { CreateKudoUseCase } from "./modules/kudos/application/use-cases/create-kudos/create-kudos.use-case";
+import setupKudoRoutes from "./modules/kudos/presentation/routes/kudos.routes";
 
 export interface AppDependencies {
   registerUserUseCase: RegisterUserUseCase;
   loginUseCase: LoginUseCase;
+  createKudoUseCase: CreateKudoUseCase;
 }
 
 export function createApp(dependencies: AppDependencies): Application {
@@ -47,7 +50,13 @@ export function createApp(dependencies: AppDependencies): Application {
     registerUserUseCase: dependencies.registerUserUseCase,
     loginUseCase: dependencies.loginUseCase,
   });
+
+  const kudoRoutes = setupKudoRoutes({
+    createKudoUseCase: dependencies.createKudoUseCase,
+  });
+
   app.use("/users", userRoutes);
+  app.use("/kudos", kudoRoutes);
 
   // Conditionally add test-support routes
   // This is a critical step to ensure test-only endpoints are not available in production
@@ -64,17 +73,6 @@ export function createApp(dependencies: AppDependencies): Application {
     });
   });
 
-  app.get("/kudos", (req: Request, res: Response) => {
-    res.status(200).json({
-      message: "Digital Kudos Wall API - MVP Version",
-      kudos: [],
-      meta: {
-        total: 0,
-        page: 1,
-        limit: 10,
-      },
-    });
-  });
 
   app.get("/", (req: Request, res: Response) => {
     res.status(200).json({
