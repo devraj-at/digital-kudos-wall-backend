@@ -7,11 +7,17 @@ import { LoginUseCase } from "./modules/user/application/use-cases/login/login.u
 import { testSupportRouter } from "./modules/test-support/http/test-support.routes";
 import { CreateKudoUseCase } from "./modules/kudos/application/use-cases/create-kudos/create-kudos.use-case";
 import setupKudoRoutes from "./modules/kudos/presentation/routes/kudos.routes";
+import { GetAllCategoriesUseCase } from "./modules/category/application/use-cases/get-all-categories/get-all-categories.use-case";
+import setupCategoryRoutes from "./modules/category/presentation/routes/category.routes";
+import { GetAllTeamsUseCase } from "./modules/team/application/use-cases/get-all-teams/get-all-teams.use-case";
+import setupTeamRoutes from "./modules/team/presentation/routes/team.routes";
 
 export interface AppDependencies {
   registerUserUseCase: RegisterUserUseCase;
   loginUseCase: LoginUseCase;
   createKudoUseCase: CreateKudoUseCase;
+  getAllCategoriesUseCase: GetAllCategoriesUseCase;
+  getAllTeamsUseCase: GetAllTeamsUseCase;
 }
 
 export function createApp(dependencies: AppDependencies): Application {
@@ -55,8 +61,18 @@ export function createApp(dependencies: AppDependencies): Application {
     createKudoUseCase: dependencies.createKudoUseCase,
   });
 
+  const categoryRoutes = setupCategoryRoutes({
+    getAllCategoriesUseCase: dependencies.getAllCategoriesUseCase,
+  });
+
+  const teamRoutes = setupTeamRoutes({
+    getAllTeamsUseCase: dependencies.getAllTeamsUseCase,
+  });
+
   app.use("/users", userRoutes);
   app.use("/kudos", kudoRoutes);
+  app.use("/categories", categoryRoutes);
+  app.use("/teams", teamRoutes);
 
   // Conditionally add test-support routes
   // This is a critical step to ensure test-only endpoints are not available in production
@@ -81,6 +97,8 @@ export function createApp(dependencies: AppDependencies): Application {
       endpoints: {
         health: "/health",
         kudos: "/kudos",
+        categories: "/categories",
+        teams: "/teams",
       },
     });
   });

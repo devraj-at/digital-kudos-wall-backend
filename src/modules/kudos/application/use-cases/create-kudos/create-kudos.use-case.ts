@@ -4,11 +4,11 @@ import { KudoCard } from "../../../../user/domain/kudo.entity";
 import { KudoCardRepository } from "../../../../user/domain/kudo.repository";
 
 export interface CreateKudoDTO {
-  teamName: string;
+  teamId: string;
   message: string;
-  senderName: string;
-  receiverName: string;
-  category: string;
+  toUserId: string;
+  fromUserId: string;
+  categoryId: string;
 }
 
 export class CreateKudoUseCase
@@ -19,10 +19,10 @@ export class CreateKudoUseCase
   async execute(request: CreateKudoDTO): Promise<Result<string, string>> {
     const kudoOrError = KudoCard.create({
       message: request.message,
-      category: request.category,
-      sender: request.senderName,
-      receiver: request.receiverName,
-      team: request.teamName,
+      categoryId: request.categoryId,
+      fromUserId: request.fromUserId,
+      toUserId: request.toUserId,
+      teamId: request.teamId,
     });
 
     const kudo = kudoOrError.getValue();

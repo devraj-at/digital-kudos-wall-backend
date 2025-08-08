@@ -7,10 +7,10 @@ export class KudosController implements Controller<Request, any> {
   constructor(private readonly createKudoUseCase: CreateKudoUseCase) {}
 
   async handle(request: Request): Promise<HttpResponse<any>> {
-    const { category, message, receiverName, senderName, teamName }: CreateKudoDTO = request.body;
+    const { categoryId, message, toUserId, fromUserId, teamId }: CreateKudoDTO = request.body;
 
     try {
-      const result = await this.createKudoUseCase.execute({ category, message, receiverName, senderName, teamName });
+      const result = await this.createKudoUseCase.execute({ categoryId, message, toUserId, fromUserId, teamId });
 
       return HttpResponse.ok(result.getValue());
     } catch (error) {

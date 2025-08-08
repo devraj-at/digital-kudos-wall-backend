@@ -2,15 +2,15 @@ import { Result } from "../../../shared/core/result";
 import { Entity } from "../../../shared/domain/entity";
 
 export interface KudoCardProps {
-//   id?: string;
+  //   id?: string;
   message: string;
-  category: string;
-  sender: string;
-  receiver: string;
-  team: string;
+  categoryId: string;
+  fromUserId: string;
+  toUserId: string;
+  teamId: string;
 }
 
-export class KudoCard  extends Entity<KudoCardProps>{
+export class KudoCard extends Entity<KudoCardProps> {
   constructor(props: KudoCardProps) {
     super(props);
   }
@@ -19,31 +19,30 @@ export class KudoCard  extends Entity<KudoCardProps>{
     return this.props.message;
   }
 
-  get category(): string {
-    return this.props.category;
-  }
-  
-  get sender(): string {
-    return this.props.sender;
+  get categoryId(): string {
+    return this.props.categoryId;
   }
 
-  get receiver(): string {
-    return this.props.receiver;
+  get fromUserId(): string {
+    return this.props.fromUserId;
   }
-  
-  get team(): string {
-    return this.props.team;
+
+  get toUserId(): string {
+    return this.props.toUserId;
+  }
+
+  get teamId(): string {
+    return this.props.teamId;
   }
 
   public static create(props: KudoCardProps): Result<KudoCard, string> {
     const defaultProps = {
-        message : props.message,
-        category : props.category,
-        sender : props.sender,
-        receiver : props.receiver,
-        team : props.team,
-    }
+      message: props.message,
+      categoryId: props.categoryId,
+      fromUserId: props.fromUserId,
+      toUserId: props.toUserId,
+      teamId: props.teamId,
+    };
     return Result.ok(new KudoCard(defaultProps));
   }
-
 }
